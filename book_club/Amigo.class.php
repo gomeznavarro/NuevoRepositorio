@@ -1,78 +1,34 @@
 <?php
 
 require_once "DataObject.class.php";
-require_once "Amigo.class.php";
-class Member extends DataObject {
+
+class Amigo extends DataObject {
 
   protected $data = array(
     "id" => "",
-    "username" => "",
-    "password" => "",
     "firstName" => "",
-    "lastName" => "",
-    "joinDate" => "",
-    "gender" => "",
-    "favoriteGenre" => "",
-    "emailAddress" => "",
-    "otherInterests" => ""
+    "idmember" => ""
   );
 
-  private $_genres = array(
-    "crime" => "Crime",
-    "horror" => "Horror",
-    "thriller" => "Thriller",
-    "romance" => "Romance",
-    "sciFi" => "Sci-Fi",
-    "adventure" => "Adventure",
-    "nonFiction" => "Non-Fiction"
-  );
 
-  public static function getMembers( $startRow, $numRows, $order ) {
+  public static function getAmigos($idmember) {
     $conn = parent::connect();
-    $sql = "SELECT SQL_CALC_FOUND_ROWS * FROM " . TBL_MEMBERS . " ORDER BY $order LIMIT :startRow, :numRows";
-
+    $sql = "SELECT * FROM amigos WHERE idmember=$idmember ";
     try {
-      $st = $conn->prepare( $sql );
-      $st->bindValue( ":startRow", $startRow, PDO::PARAM_INT );
-      $st->bindValue( ":numRows", $numRows, PDO::PARAM_INT );
-      $st->execute();
-      $members = array();
+      $st = $conn->query( $sql );
+      $amigos = array();
       foreach ( $st->fetchAll(PDO::FETCH_ASSOC) as $row ) {
-        //$members[] = new Member( $row );
-		$members[] = $row;
-		//$amigos=Amigo::getAmigos($row['id']);
+        //$amigos[] = new Amigo( $row );
+		$amigos[] = $row;
       }
-      $st = $conn->query( "SELECT found_rows() as totalRows" );
-      $row = $st->fetch();
       parent::disconnect( $conn );
-      //return array( $members, $row["totalRows"] );
-	  return $members;
-	 // echo json_encode($members); 
+      return $amigos;
     } catch ( PDOException $e ) {
       parent::disconnect( $conn );
       die( "Query failed: " . $e->getMessage() );
     }
   }
-  public static function getMembersNormal() {
-    $conn = parent::connect();
-    $sql = "SELECT * FROM " . TBL_MEMBERS ;
 
-    try {
-      $st = $conn->prepare( $sql );      
-      $st->execute();
-      $members = array();
-      foreach ( $st->fetchAll(PDO::FETCH_ASSOC) as $row ) {       
-		$members[] = $row;		
-      }
-      return $members;
-	 // echo json_encode($members); 
-    } catch ( PDOException $e ) {
-      parent::disconnect( $conn );
-      die( "Query failed: " . $e->getMessage() );
-    }
-  }
-  
-  
   public static function getMember( $id ) {
     $conn = parent::connect();
     $sql = "SELECT * FROM " . TBL_MEMBERS . " WHERE id = :id";

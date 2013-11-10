@@ -1,5 +1,5 @@
 <?php
-define( "DB_DSN", "mysql:dbname=myregistro;host=localhost" );
+define( "DB_DSN", "mysql:dbname=mypractico;host=localhost" );
 define( "DB_USERNAME", "root" );
 define( "DB_PASSWORD", "140573" );
 define( "PAGE_SIZE", 5 );
