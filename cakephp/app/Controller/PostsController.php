@@ -3,8 +3,16 @@ class PostsController extends AppController {
     public $helpers = array('Html', 'Form');
 	public $components = array('Session');
 	
-	public function index() {
+	/*public function index() {
         $this->set('posts', $this->Post->find('all'));
+    }*/
+	
+	public function index() {
+        
+		 $userid = $this->Session->read('Auth.User.id');
+         $myposts = $this->Post->find('all', array('conditions' => array('Post.user_id' => $userid)));
+		 $this->set('posts', $myposts);
+		
     }
 	public function view($id = null) {
         if (!$id) {

@@ -21,7 +21,6 @@ public function logout() {
     return $this->redirect($this->Auth->logout());
 }
 
-
     public function index() {
         $this->User->recursive = 0;
         $this->set('users', $this->paginate());
